@@ -1,14 +1,18 @@
-# Things to do still:
+# `// TODO:`
 
-### Next
+## Next
+
 - Static rules logic
 - Assigning points based on rules
 - Saving points to db
 
-### Short Term
-- Finish the rest of the *Assembler classes for each of the packages
-- Api sanity testing using Bruno
+## Short Term
 
-### Long Term
+- Finish the rest of the *Assembler classes for each of the packages
+- API sanity testing using Bruno
+
+## Long Term
+
 - Figure out how to serialize dynamic "rules" to save to database
 - Testing. Maybe?
+

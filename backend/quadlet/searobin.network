@@ -1,0 +1,5 @@
+[Unit]
+Description=SeaRobin-App container network
+
+[Network]
+Label=app=searobin

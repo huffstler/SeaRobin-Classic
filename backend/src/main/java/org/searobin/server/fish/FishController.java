@@ -17,33 +17,33 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/fish")
 public class FishController {
 
-    private final FishRepository fishRepository;
-    private final FishModelAssembler assembler;
+  private final FishRepository fishRepository;
+  private final FishModelAssembler assembler;
 
-    public FishController(@Autowired FishRepository fishRepository, @Autowired FishModelAssembler assembler) {
-        this.fishRepository = fishRepository;
-        this.assembler = assembler;
+  public FishController(@Autowired FishRepository fishRepository, @Autowired FishModelAssembler assembler) {
+    this.fishRepository = fishRepository;
+    this.assembler = assembler;
+  }
+
+  @GetMapping
+  public CollectionModel<EntityModel<Fish>> getAllFish() {
+
+    List<Fish> allFish = fishRepository.findAll();
+
+    List<EntityModel<Fish>> fishList = allFish.stream().map(assembler::toModel).toList();
+
+    return CollectionModel.of(fishList, linkTo(methodOn(FishController.class).getAllFish()).withSelfRel());
+  }
+
+  @GetMapping("/{id}")
+  public EntityModel<Fish> getFishById(@PathVariable Long id) {
+    Fish fish = new Fish();
+    try {
+      fish = fishRepository.findById(id).orElseThrow(ClassNotFoundException::new);
+    } catch (ClassNotFoundException ex) {
+      System.out.println("Error here: " + ex.getException());
     }
-
-    @GetMapping
-    public CollectionModel<EntityModel<Fish>> getAllFish() {
-
-        List<Fish> allFish = fishRepository.findAll();
-
-        List<EntityModel<Fish>> fishList = allFish.stream().map(assembler::toModel).toList();
-
-        return CollectionModel.of(fishList, linkTo(methodOn(FishController.class).getAllFish()).withSelfRel());
-    }
-
-    @GetMapping("/{id}")
-    public EntityModel<Fish> getFishById(@PathVariable Long id) {
-        Fish fish = new Fish();
-        try {
-            fish = fishRepository.findById(id).orElseThrow(ClassNotFoundException::new);
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Error here: " + ex.getException());
-        }
-        return assembler.toModel(fish);
-    }
+    return assembler.toModel(fish);
+  }
 
 }

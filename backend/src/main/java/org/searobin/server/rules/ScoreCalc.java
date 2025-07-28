@@ -18,18 +18,17 @@ import java.util.function.Function;
 @Component
 public class ScoreCalc {
 
-    private static final Function<Catch, Float> categoryRule = (Catch haul) -> {
-        Fish species = haul.getFish();
-        Tier tier = species.getTier();
-        return Tier.getTier(species).getScorePerInch() * haul.getLength();
-    };
-    //  private List<Rule> ruleList;
+	// private static final Function<Catch, Float> categoryRule = (Catch haul) -> {
+	// Fish species = haul.getFish();
+	// Tier tier = species.getTier();
+	// return Tier.getTier(species).getScorePerInch() * haul.getLength();
+	// };
+	// private List<Rule> ruleList;
 
-    // public void init(){
-    //
-    // initialize the ruleList
-    //
-    // }
-
+	// public void init(){
+	//
+	// initialize the ruleList
+	//
+	// }
 
 }

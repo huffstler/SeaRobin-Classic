@@ -1,0 +1,14 @@
+[Unit]
+Description=SeaRobin PGSQL Container
+
+[Container]
+Label=app=searobin
+ContainerName=searobin-db
+Image=docker.io/library/postgresql:17-alpine
+Network=searobin.network
+Volume=searobin-db.volume:
+Environment=POSTGRES_USER=admin-searobin
+Environment=POSTGRES_PASSWORD=adminpasswordsearobin
+
+[Install]
+WantedBy=multi-user.target default.target
