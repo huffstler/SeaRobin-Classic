@@ -1,3 +1,35 @@
+insert into searobin.tiers(name) values
+('GAME'),
+('SPORT'),
+('TRASH'),
+('SHINE'),
+('SEA ROBIN');
+select * from searobin.tiers;
+
+insert into searobin.fish(name,tier_id) values
+('Striped Bass',1),
+('Flounder',	1),
+('Red Drum',	1),
+('Sheepshead',	2),
+('Spot',		2),
+('Blue Fish',	2),
+('Croaker',		2),
+('Silver Perch',2),
+('Kingfish',	2),
+('Eel',			2),
+('Black Drum',	2),
+('Sea Trout',	2),
+('Spotted Hake',2),
+('Cusk Eel',	2),
+('Shark',		3),
+('Skate',		3),
+('Ray',			3),
+('Toadfish',	3),
+('Oyster Cracker',3),
+('Stargazer',	3),
+('Pufferfish',	3),
+('Sea Robin',	5);
+
 insert into searobin.anglers(username,created_on) values
 ('foo', now()),('bar', now()),('baz', now());
 
@@ -33,40 +65,6 @@ angler as (
 fish as (
 	select * from searobin.fish where name = 'Black Drum'
 )
-insert into searobin.catches(tournament_id, angler_id, fish_id, fish_length, catch_time)
-select tourney.id, angler.id, fish.id, 10, now() from tourney, angler, fish;
+insert into searobin.catches(membership_id, fish_id, fish_length, catch_time)
+select angler.id, fish.id, 10, now() from tourney, angler, fish;
 --select * from searobin.catches;
-
-insert into searobin.tiers(name) values
-('GAME'),
-('SPORT'),
-('TRASH'),
-('SHINE'),
-('SEA ROBIN');
-select * from searobin.tiers;
-
-insert into searobin.fish(name,tier_id) values
-('Striped Bass',1),
-('Flounder',	1),
-('Red Drum',	1),
-('Sheepshead',	2),
-('Spot',		2),
-('Blue Fish',	2),
-('Croaker',		2),
-('Silver Perch',2),
-('Kingfish',	2),
-('Eel',			2),
-('Black Drum',	2),
-('Sea Trout',	2),
-('Spotted Hake',2),
-('Cusk Eel',	2),
-('Shark',		3),
-('Skate',		3),
-('Ray',			3),
-('Toadfish',	3),
-('Oyster Cracker',3),
-('Stargazer',	3),
-('Pufferfish',	3),
-('Sea Robin',	5);
-
-select * from searobin.fish;
