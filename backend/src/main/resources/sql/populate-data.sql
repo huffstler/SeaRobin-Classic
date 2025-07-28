@@ -43,6 +43,7 @@ insert into searobin.tiers(name) values
 ('TRASH'),
 ('SHINE'),
 ('SEA ROBIN');
+select * from searobin.tiers;
 
 insert into searobin.fish(name,tier_id) values
 ('Striped Bass',1),
@@ -67,3 +68,5 @@ insert into searobin.fish(name,tier_id) values
 ('Stargazer',	3),
 ('Pufferfish',	3),
 ('Sea Robin',	5);
+
+select * from searobin.fish;

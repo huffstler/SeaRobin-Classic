@@ -1,6 +1,6 @@
 -- CREATE DATABASE searobin;
 -- \c searobin
--- SET search_path TO searobin,public;
+SET search_path TO searobin,public;
 -- can update schema later on to have org level rules as well as tournament level rules
 drop table if exists anglers cascade;
 drop table if exists catches cascade;
@@ -26,7 +26,7 @@ create table searobin.tournaments (
 	end_time timestamp,
 	created_on timestamp,
 	modified_on timestamp
-
+	
 	-- I'm thinking I want some sort of "global" score count here, ;
 	-- but not sure what data type to have that as yet. Maybe json blob that's
 	-- calculated once, and stored here after for faster results after tourney ends.
@@ -57,7 +57,8 @@ create table membership (
 	modified_on timestamp default now()
 );
 
-create sequence tiers_id_seq;
+create sequence if not exists tiers_id_seq;
+alter sequence if exists tiers_id_seq restart with 1;
 
 create table tiers(
     id integer NOT NULL DEFAULT nextval('tiers_id_seq'::regclass),
@@ -66,10 +67,13 @@ create table tiers(
     CONSTRAINT tiers_name_check CHECK (name <> ''::text)
 );
 
+create sequence if not exists fish_id_seq;
+alter sequence if exists fish_id_seq restart with 1;
+
 create table fish (
     name text COLLATE pg_catalog."default",
     tier_id integer,
-    id integer NOT NULL DEFAULT nextval('tiers_id_seq'::regclass),
+    id integer NOT NULL DEFAULT nextval('fish_id_seq'::regclass),
     CONSTRAINT fish_pkey PRIMARY KEY (id),
     CONSTRAINT fish_tier_id_fk FOREIGN KEY (tier_id)
         REFERENCES tiers (id) MATCH SIMPLE
