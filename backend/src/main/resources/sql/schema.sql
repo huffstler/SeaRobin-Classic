@@ -1,6 +1,6 @@
-CREATE DATABASE searobin;
-\c searobin
-
+-- CREATE DATABASE searobin;
+-- \c searobin
+-- SET search_path TO searobin,public;
 -- can update schema later on to have org level rules as well as tournament level rules
 drop table if exists anglers cascade;
 drop table if exists catches cascade;
@@ -18,7 +18,7 @@ create table organization(
 );
 CREATE INDEX organization_name_idx on organization (org_name);
 
-create table tournaments (
+create table searobin.tournaments (
 	id uuid primary key default gen_random_uuid(),
 	organization_id uuid references organization (id),
 	tournament_name text not null, -- add index on this field
@@ -26,24 +26,12 @@ create table tournaments (
 	end_time timestamp,
 	created_on timestamp,
 	modified_on timestamp
-	
+
 	-- I'm thinking I want some sort of "global" score count here, ;
 	-- but not sure what data type to have that as yet. Maybe json blob that's
 	-- calculated once, and stored here after for faster results after tourney ends.
 );
 CREATE INDEX tournament_name_idx on tournaments (tournament_name);
-
--- used for mapping anglers to tournaments and vice versa
-create table membership (
-	id uuid primary key default gen_random_uuid(),
-	tournament_id uuid references tournaments (id),
-	organization_id uuid references organization (id),
-	angler_id uuid references anglers (id),
-	is_org_admin boolean default 'false',
-	is_tourney_admin boolean default 'false',
-	created_on timestamp default now(),
-	modified_on timestamp default now()
-);
 
 create table anglers (
 	id uuid primary key default gen_random_uuid(),
@@ -57,17 +45,19 @@ create table anglers (
 );
 CREATE INDEX angler_name_idx on anglers (username);
 
-create table catches (
-    -- I don't think we need a new uuid for each catch. could probably make an index based on 3 or 4 other columns?
+-- used for mapping anglers to tournaments and vice versa
+create table membership (
 	id uuid primary key default gen_random_uuid(),
-
-	membership_id uuid references membership (id),
-
-	fish_id int references fish (id),
-	fish_length real,
-	used_lure boolean default 'false',
-	catch_time timestamp default now()
+	tournament_id uuid references tournaments (id),
+	organization_id uuid references organization (id),
+	angler_id uuid references anglers (id),
+	is_org_admin boolean default 'false',
+	is_tourney_admin boolean default 'false',
+	created_on timestamp default now(),
+	modified_on timestamp default now()
 );
+
+create sequence tiers_id_seq;
 
 create table tiers(
     id integer NOT NULL DEFAULT nextval('tiers_id_seq'::regclass),
@@ -85,4 +75,16 @@ create table fish (
         REFERENCES tiers (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+);
+
+create table catches (
+    -- I don't think we need a new uuid for each catch. could probably make an index based on 3 or 4 other columns?
+	id uuid primary key default gen_random_uuid(),
+
+	membership_id uuid references membership (id),
+
+	fish_id int references fish (id),
+	fish_length real,
+	used_lure boolean default 'false',
+	catch_time timestamp default now()
 );
