@@ -59,30 +59,27 @@ public class Rule {
     /**
      * More docs to come, assumptions were off a bit
      */
-    private static final Function<Catch, Float> sizeBonusRule = (
-            Catch haul) -> switch (haul.getFish().getTier().getName()) {
+    private static final Function<Catch, Float> sizeBonusRule = (Catch haul) -> switch (haul.getFish().getTier().getName()) {
         case "GAME" -> Math.max(5 * (haul.getFishLength() - 10), 0);
         case "SPORT" -> Math.max(2 * (haul.getFishLength() - 10), 0);
         default -> Math.max(1 * (haul.getFishLength() - 10), 0);
     };
 
-    private static final List<Function<Catch, Float>> STATIC_RULES = List.of(
-            categoryRule, lureRule, sizeBonusRule, trophyFishRule);
+    private static final List<Function<Catch, Float>> STATIC_RULES = List.of(categoryRule, lureRule, sizeBonusRule, trophyFishRule);
     //
     private static final List<Function<Catch, Float>> DYNAMIC_RULES = List.of(
             // , recordCatchRule
             // fullMontyRule
     );
+
     //
     // // Thanks to whispersilk for helping collect my thoughts on how to do scoring
     // :)
     // //
     // https://tildes.net/~comp/14pv/what_programming_technical_projects_have_you_been_working_on#comment-7rnd
-    // public float getPreScore(Catch haul){
-    // return STATIC_RULES.stream()
-    // .map(r -> r.apply(haul))
-    // .reduce(0f, Float::sum);
-    // }
+    public float getPreScore(Catch haul) {
+        return STATIC_RULES.stream().map(r -> r.apply(haul)).reduce(0f, Float::sum);
+    }
     //
     // public float getPostScore(Catch haul){
     // return DYNAMIC_RULES.stream()
